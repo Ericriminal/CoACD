@@ -143,6 +143,13 @@ public unsafe class CoACD : MonoBehaviour
         GenerateCollisionMeshes(target);
     }
 
+    [ContextMenu("Generate Collision Meshes Components")]
+    public void GenerateCollisionMeshesComponents()
+    {
+        GenerateCollisionMeshesComponents(target);
+    }
+
+
     [ContextMenu("Generate Collision Meshes For Hierarchy")]
     public void GenerateCollisionMeshesForHierarchy()
     {
@@ -173,6 +180,19 @@ public unsafe class CoACD : MonoBehaviour
             go.transform.localPosition = Vector3.zero;
             go.transform.localRotation = Quaternion.identity;
             go.transform.localScale = Vector3.one;
+        }
+    }
+
+    public void GenerateCollisionMeshesComponents(MeshFilter target) {
+        var baseMesh = target.sharedMesh;
+        var meshes = RunACD(baseMesh);
+        foreach (var item in meshes)
+        {
+            var col = target.gameObject.AddComponent<MeshCollider>();
+            var filt = target.gameObject.AddComponent<MeshFilter>();
+            filt.sharedMesh = item;
+            col.sharedMesh = item;
+            col.convex = true;
         }
     }
 }
